@@ -1,0 +1,61 @@
+body {
+	background-image:url(../Image/Background.png);
+}
+
+.a{
+	background-color: rgba(0,0,0, 0.7);
+}
+
+.jumbotron{
+	background: transparent;
+	color: white;
+	/*font-size: 60px;*/
+}
+
+.header h1{
+	color: white;
+	text-align: center;
+}
+.container h1{
+	color: white;
+	text-align: center;
+}
+
+.table th{
+	text-align: center;
+}
+
+#content2{
+	background-color: rgba(0,0,0,0.5);
+	width: 800px;
+	border-radius: 25pt;
+	padding: 50px;
+	margin: 25px;
+	height: 325px;
+	margin-bottom: 1px;
+	position: relative;
+	bottom: 10px;
+	left: 150px;
+
+}
+
+.button {
+	position: relative;
+	left: 550px;
+	top: 100px;
+
+}
+
+#content3{
+	background-color: white;
+	width: 800px;
+	border-radius: 25pt;
+	padding: 50px;
+/*	margin: 25px;*/
+	height: 225px;
+	margin-bottom: 1px;
+	position: absolute;
+	bottom: 40px;
+	left: -5px;
+}
+
