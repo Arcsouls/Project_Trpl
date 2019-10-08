@@ -1,0 +1,43 @@
+body{
+	background-image: url(../Image/Background.png);
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+
+.jumbotron {
+	background-color: transparent;
+	color: white;
+	padding-bottom: 24px;
+	margin-bottom: 0px
+}
+
+.row a{
+	color: white;
+	text-decoration-style: none;
+
+}
+
+.thumbnail img{
+	border-radius: 15%;
+}
+
+.thumbnail {
+	border-radius: 15%;
+}
+
+.table {
+	margin-top: 25px;
+	margin-left: 25%;
+	background-color: white;
+	text-align: center;
+}
+
+.img-thumbnail img{
+	border-radius: 15%;
+	width: 60px;
+}
+
+.center-block {
+  float:none;
+}
