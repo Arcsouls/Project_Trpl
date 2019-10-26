@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
+	
 	<link href="../css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="../css/style.css" >
-	<title></title>
+	<link rel="stylesheet" href="../css/Style2.css" >
+	<link rel="shortcut icon" href="../Image/logo.png">
+	<title>Manajemen Permintaan Stok Darah</title>
 
 </head>
 <body>
-	<div class="jumbotron text-center">
-		<h1>MANAJEMEN PERMINTAAN</h1>
-		<h1 style="text-decoration: underline; font-size: 55px">STOK DARAH</h1> 
+	<div class="header">
+		<div class="jumbotron text-center">
+			<h1 style="font-size: 50pt">MANAJEMEN PERMINTAAN</h1>
+			<h1 style="font-size: 35pt">STOK DARAH</h1>
+		</div> 
+	</div>
 
-	</div> 
-	<?php include "koneksi.php"; ?>
+	<?php include "Function.php"; ?>

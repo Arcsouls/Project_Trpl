@@ -1,0 +1,47 @@
+body{
+	background-image: url(../Image/Background.png);
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+
+.jumbotron {
+	font-family: "BebasNeue-Regular";
+	background-color: transparent;
+	color: white;
+	padding-bottom: 24px;
+	margin-bottom: 0px
+}
+
+.row a{
+	color: white;
+	text-decoration-style: none;
+
+}
+
+.thumbnail img{
+	border-radius: 15%;
+}
+
+.thumbnail {
+	border-radius: 15%;
+}
+
+
+.img-thumbnail img{
+	border-radius: 15%;
+	width: 60px;
+}
+
+.center-block {
+  float:none;
+}
+
+@font-face{
+	font-family: "BebasNeue-Regular";
+	src :url(../BebasNeue-Regular.ttf);
+}
+.table {
+	margin-top: 25px;
+	background-color: white;
+}
