@@ -18,7 +18,7 @@
 					</tr>
 				</thead>
 				<?php 
-				$sql = mysqli_query ($con, "SELECT * FROM permintaan order by `Bulan_Permintaan` asc") or die (mysqli_error($co));
+				$sql = mysqli_query ($con, "SELECT * FROM prediksi order by `Bulan_prediksi` asc") or die (mysqli_error($con));
 				if (mysqli_num_rows($sql) > 0) {
 					$xa = 0;
 					$jumlah_xa = 0;
@@ -68,7 +68,7 @@
 
 						?>
 						<tr>
-							<td style="text-align: left;"><?=$data['Bulan_Permintaan'];?></td>
+							<td style="text-align: left;"><?=$data['Bulan_prediksi'];?></td>
 							<td style="text-align: center;"><?=$data['Goldar_A'];?></td>
 							<td align="center"><?=$data['Goldar_B'];?></td>
 							<td align="center"><?=$data['Goldar_AB'];?></td>

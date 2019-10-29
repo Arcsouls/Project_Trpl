@@ -14,7 +14,7 @@ include "header.php";
 	<div class="row" style="background-color: rgba(0,0,0, 0.5); border-radius: 25px;">
 		<div class="col-sm-8 table-responsive text-center">
 			<?php 
-			$sql = "SELECT * FROM  permintaan p, user r WHERE p.idRS = r.id_RS ";
+			$sql = "SELECT * FROM  permintaan p, user r WHERE p.Id_RS = r.id_RS order by `Bulan_Permintaan` asc";
 			$result = mysqli_query($con, $sql);
 			?>
 			<table class="table table-bordered">
@@ -46,7 +46,7 @@ include "header.php";
 
 	</div>
 	<button type="submit" class="btn btn-danger btn-lg float-right" >
-		<a href="BerandaRS.php" style="color: white; text-decoration: none;">Kembali</a>
+		<a href="BerandaAdmin.php" style="color: white; text-decoration: none;">Kembali</a>
 	</button>
 	<br>
 </div>

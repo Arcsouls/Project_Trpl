@@ -3,35 +3,101 @@
 <?php
 
 require 'Function.php';
-
+session_start();
+$id_author = $_SESSION['user_id'];
 
 if (isset($_POST["submit"])) {
-
+	// var_dump($_POST['Bulan_Permintaan']);
+	// die;
 	$Goldar_A = $_POST['Goldar_A'];//// inisialisasi gol darah a
 	$Goldar_B = $_POST['Goldar_B']; // inisialisasi gol darah b
 	$Goldar_AB = $_POST['Goldar_AB'];// inisialisasi gol darah ab
 	$Goldar_O = $_POST['Goldar_O'];// inisialisasi gol darah o
 	$Bulan_Permintaan = $_POST['Bulan_Permintaan'];//inisialisasi bulan
 
-	
-	//Mengechek bulan yang sama 
-	$hasil = mysqli_query($con, "SELECT Bulan_Permintaan FROM permintaan where Bulan_Permintaan = '$Bulan_Permintaan' ");
-	if (mysqli_fetch_assoc($hasil)) {
-		if ($Goldar_A > 0 ) {
-			mysqli_query($con,"UPDATE `permintaan` SET `Goldar_A`= `Goldar_A`+'$Goldar_A', `Goldar_B`= `Goldar_B`+'$Goldar_B',`Goldar_AB`= `Goldar_AB`+'$Goldar_AB', `Goldar_O`= `Goldar_O`+'$Goldar_O'  WHERE Bulan_Permintaan = '$Bulan_Permintaan'"); 
-		}
-	}else{
-		//Menambahkan data pemintaan darah baru
-		mysqli_query($con, "INSERT INTO `permintaan`(`Goldar_A`,`Goldar_B`,`Goldar_AB`,`Goldar_O`,`Bulan_Permintaan`) VALUES ('$Goldar_A','$Goldar_B','$Goldar_AB','$Goldar_O','$Bulan_Permintaan')");
-	}
-
+	$hasil = mysqli_query($con, "SELECT Bulan_Permintaan FROM permintaan where Bulan_Permintaan = '$Bulan_Permintaan' and Id_RS = '$id_author'");
+	$hasil2 = mysqli_query($con, "SELECT Bulan_Prediksi FROM prediksi where Bulan_Prediksi = '$Bulan_Permintaan'");
+	//mengecheck apakah bulan lebih kecil dari tanggal sekarang
 	if ($Bulan_Permintaan < date("Y-m")) {
-		echo `<script>
-		alert ("asuu");
-		</script>`;
+		echo "<script>
+		alert('Data salah');
+		</script>";
+	}elseif ($Goldar_A< 0 || $Goldar_B< 0 || $Goldar_AB< 0 || $Goldar_O< 0  ){
+		echo "<script>
+		alert('Data salah');
+		</script>";
+
+	}else{
+		if (mysqli_fetch_assoc($hasil)) { 
+			if ($Goldar_A > 0 || $Goldar_B > 0 || $Goldar_AB > 0 ||  $Goldar_O > 0 ) {
+				mysqli_query($con,"UPDATE `permintaan` SET `Goldar_A`= `Goldar_A`+'$Goldar_A', `Goldar_B`= `Goldar_B`+'$Goldar_B',`Goldar_AB`= `Goldar_AB`+'$Goldar_AB', `Goldar_O`= `Goldar_O`+'$Goldar_O'  WHERE Bulan_Permintaan = '$Bulan_Permintaan' and Id_RS = $id_author "); 
+			}
+		}else{
+			//Menambahkan data pemintaan darah baru
+			mysqli_query($con, "INSERT INTO `permintaan`(`Goldar_A`,`Goldar_B`,`Goldar_AB`,`Goldar_O`,`Bulan_Permintaan`, `idRS`) VALUES ('$Goldar_A','$Goldar_B','$Goldar_AB','$Goldar_O','$Bulan_Permintaan','$id_author')");	
+			
+			if (mysqli_fetch_assoc($hasil2)) {
+				mysqli_query($con,"UPDATE `prediksi` SET `Goldar_A`= `Goldar_A`+'$Goldar_A', `Goldar_B`= `Goldar_B`+'$Goldar_B',`Goldar_AB`= `Goldar_AB`+'$Goldar_AB', `Goldar_O`= `Goldar_O`+'$Goldar_O'  WHERE Bulan_Prediksi = '$Bulan_Permintaan'"); 
+			} else {
+				mysqli_query($con, "INSERT INTO `prediksi`(`Goldar_A`,`Goldar_B`,`Goldar_AB`,`Goldar_O`,`Bulan_Prediksi`, `idRS`) VALUES ('$Goldar_A','$Goldar_B','$Goldar_AB','$Goldar_O','$Bulan_Permintaan')");
+			}
+		}
 	}
 }
+
+if (isset($_POST["Tambah"])) {
+	$gass = mysqli_query($con,"SELECT * FROM stokdarah where Id_RS = '$id_author' ");
+	$row = mysqli_fetch_assoc($gass);
+	$Golongan = $_POST['Golongan'];// inisialisasi golongan
+	$Jumlah =  $_POST['Jumlah'];// inisialisasi Jumlah
+	if ($Jumlah< 0){
+		echo "<script>
+		alert('Data salah');
+		</script>";
+	} else {
+		if ($Golongan == 'A') {
+			$a = $row['Goldar_A'] + $Jumlah;
+			mysqli_query($con,"UPDATE `stokdarah` SET `Goldar_A`= '$a'WHERE Id_RS ='$id_author'");
+		}else if ($Golongan == 'B') {
+			$a = $row['Goldar_B'] + $Jumlah;
+			mysqli_query($con,"UPDATE `stokdarah` SET `Goldar_A`= '$a'WHERE Id_RS ='$id_author'");
+		}else if ($Golongan == 'AB') {
+			$a = $row['Goldar_AB'] + $Jumlah;
+			mysqli_query($con,"UPDATE `stokdarah` SET `Goldar_A`= '$a'WHERE Id_RS ='$id_author'");
+		}else if ($Golongan == 'O') {
+			$a = $row['Goldar_O'] + $Jumlah;
+			mysqli_query($con,"UPDATE `stokdarah` SET `Goldar_A`= '$a'WHERE Id_RS ='$id_author'");
+		}
+	}	
+}
+
+if (isset($_POST["Ambil"])) {
+	$gass = mysqli_query($con,"SELECT * FROM stokdarah where Id_RS = '$id_author' ");
+	$row = mysqli_fetch_assoc($gass);
+	$Golongan = $_POST['Golongan'];// inisialisasi golongan
+	$Jumlah =  $_POST['Jumlah'];// inisialisasi Jumlah
+	if ($Jumlah< 0){
+		echo "<script>
+		alert('Data salah');
+		</script>";
+	} else {
+		if ($Golongan == 'A') {
+			$a = $row['Goldar_A'] - $Jumlah;
+			mysqli_query($con,"UPDATE `stokdarah` SET `Goldar_A`= '$a'WHERE Id_RS ='$id_author'");
+		}else if ($Golongan == 'B') {
+			$a = $row['Goldar_B'] - $Jumlah;
+			mysqli_query($con,"UPDATE `stokdarah` SET `Goldar_A`= '$a'WHERE Id_RS ='$id_author'");
+		}else if ($Golongan == 'AB') {
+			$a = $row['Goldar_AB'] - $Jumlah;
+			mysqli_query($con,"UPDATE `stokdarah` SET `Goldar_A`= '$a'WHERE Id_RS ='$id_author'");
+		}else if ($Golongan == 'O') {
+			$a = $row['Goldar_O'] - $Jumlah;
+			mysqli_query($con,"UPDATE `stokdarah` SET `Goldar_A`= '$a'WHERE Id_RS ='$id_author'");
+		}
+	}	
+}
 ?>
+
 <div class="container">
 	<div class="row">
 		<div class="col-sm-12 text-center">
@@ -41,9 +107,8 @@ if (isset($_POST["submit"])) {
 	<div class="row" style="background-color: rgba(0,0,0, 0.5); border-radius: 25px;">
 		<div class="col-sm-8 table-responsive text-center">
 			<?php 
-			session_start();
-			$id_author = $_SESSION['user_id'];
-			$sql = ("SELECT * FROM permintaan where idRS = '$id_author' order by Bulan_Permintaan asc") or die (mysqli_error($con));
+			
+			$sql = ("SELECT * FROM stokdarah ") or die (mysqli_error($co));
 			$result = mysqli_query ($con,$sql); 
 			?>
 			<table class="table table-bordered">
@@ -53,7 +118,6 @@ if (isset($_POST["submit"])) {
 						<th style="text-align: center;">B</th>
 						<th style="text-align: center;">AB</th>
 						<th style="text-align: center;">O</th>
-						<th style="text-align: center;">Bulan Permintaan</th>
 					</tr>
 				</thead>
 				<?php
@@ -64,14 +128,13 @@ if (isset($_POST["submit"])) {
 						<td align="center"><?=$data['Goldar_B'];?></td>
 						<td align="center"><?=$data['Goldar_AB'];?></td>
 						<td align="center"><?=$data['Goldar_O'];?></td>
-						<td align="center"><?=$data['Bulan_Permintaan'];?></td>
 					</tr>
 					<?php 
 				}
 				?>
 				<?php 
 				?>
-				<!-- <table class=" table" style="background-color: transparent; margin-top: 0; ">
+				<table class=" table" style="background-color: transparent; margin-top: 0; ">
 					<tr style="">
 						<th>
 							<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#Goldar_A" name="Pesan_GoldarA">
@@ -90,7 +153,7 @@ if (isset($_POST["submit"])) {
 						</th>
 						
 					</tr>
-				</table> -->
+				</table>
 			</table>
 		</div>
 		
@@ -142,12 +205,21 @@ if (isset($_POST["submit"])) {
 					<br>
 					<form method="post" action="" style="text-align: center">
 						<div class="form-group">
-							<label>Masukkan Jumlah Darah Golongan B</label>
+							<label>Masukkan Jumlah Darah</label>
 							<br>
-							<label>Tanggal</label><input type="month" id="n " name="Bulan_Permintaan" required>  
-							<input type="number" id="n" name="Goldar_B" placeholder="Jumlah" required> 
+							<label>Golongan Darah</label>
+							<select class=" form-control" name="Golongan" >
+								<option disabled selected>Golongan Darah</option>
+								<option value="A">A</option>
+								<option value="B">B</option>
+								<option value="AB">AB</option>
+								<option value="O">O</option>
+							</select>
+							<br> 
+							<label>Jumlah</label>
+							<input type="number" id="n" name="Jumlah" placeholder="Jumlah" required> 
 						</div>
-						<button type='submit' name="submit" class="btn btn-danger">Pesan</button>
+						<button type='submit' name="Tambah" class="btn btn-danger">Tambah</button>
 					</form>
 				</div>
 			</div>
@@ -161,31 +233,21 @@ if (isset($_POST["submit"])) {
 					<br>
 					<form method="post" action="" style="text-align: center">
 						<div class="form-group">
-							<label>Masukkan Jumlah Darah Golongan AB</label>
+							<label>Masukkan Jumlah Darah</label>
 							<br>
-							<label>Tanggal</label><input type="month" id="n " name="Bulan_Permintaan" required>  
-							<input type="number" id="n" name="Goldar_AB" placeholder="Jumlah" required> 
+							<label>Golongan Darah</label>
+							<select class=" form-control" name="Golongan" >
+								<option disabled selected>Golongan Darah</option>
+								<option value="A">A</option>
+								<option value="B">B</option>
+								<option value="AB">AB</option>
+								<option value="O">O</option>
+							</select>
+							<br> 
+							<label>Jumlah</label>
+							<input type="number" id="n" name="Jumlah" placeholder="Jumlah" required> 
 						</div>
-						<button type='submit' name="submit" class="btn btn-danger">Pesan</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="modal fade" id="Goldar_O" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-body">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<br>
-					<form method="post" action="" style="text-align: center">
-						<div class="form-group">
-							<label>Masukkan Jumlah Darah Golongan O</label>
-							<br>
-							<label>Tanggal</label><input type="month" id="n " name="Bulan_Permintaan" required>  
-							<input type="number" id="n" name="Goldar_O" placeholder="Jumlah" required> 
-						</div>
-						<button type='submit' name="submit" class="btn btn-danger">Pesan</button>
+						<button type='submit' name="Ambil" class="btn btn-danger">Ambil</button>
 					</form>
 				</div>
 			</div>

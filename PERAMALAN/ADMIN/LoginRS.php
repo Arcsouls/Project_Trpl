@@ -8,8 +8,12 @@ if (isset($_POST["login"])) {
 
 	$result =  mysqli_query($con,"SELECT * FROM user where Username = '$Username' and password = '$password'");
 	$cek = mysqli_num_rows($result);
+	$data = mysqli_fetch_array($result);
+	// return var_dump($data['Id_RS']);
 	if ( $cek > 0 ) {
-
+		session_start(); 
+		$_SESSION['login'] =true;
+		$_SESSION["user_id"] = $data['Id_RS'];
 		header("Location: BerandaRS.php");
 		exit;
 	}
